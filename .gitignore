@@ -26,3 +26,9 @@ dist-ssr
 
 src/server/gcloudkey.json
 gcloudkey.json
+
+.env
+
+env.js
+
+config.js

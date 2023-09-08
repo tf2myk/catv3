@@ -1,3 +1,11 @@
+const config = require('./config.js');  
+import { createClient } from '@supabase/supabase-js'
+
+
+const supabase = createClient(config.DATABASE_URL, config.API_KEY)
+
+
+
 import express from "express";
 import ViteExpress from "vite-express";
 
@@ -9,13 +17,18 @@ const storageClient = new Storage({
   keyFilename: 'src/server/asdadsa.json', // Replace with your key file path
 });
 
-
 const bucketName = 'cata_test_1';
 
 const app = express();
 
-app.get("/hello", (_, res) => {
-  res.send("Hello Vite + React + TypeScript!");
+
+//const key = import.meta.env.SUPAURL
+
+app.get("/apitest", (_, res) => {
+
+  res.send(
+    config.API_KEY
+  );
 });
 
 app.get("/PagePost", (_, res) => {
@@ -50,7 +63,8 @@ app.post('/Upload', upload.array('image'), (req, res) => {
 
         blobStream.on('finish', () => {
           const imageUrl = `https://storage.googleapis.com/${bucketName}/${file.originalname}`;
-          console.log('File uploaded:', imageUrl);
+          let encodedObjectName = imageUrl.replace(/ /g, '%20');
+          console.log('File uploaded:', encodedObjectName);
           resolve(imageUrl);
         });
 
@@ -71,10 +85,6 @@ app.post('/Upload', upload.array('image'), (req, res) => {
     res.status(500).json({ error: 'An error occurred' });
   }
 });
-
-
-
-
 
 
 

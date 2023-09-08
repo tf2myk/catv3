@@ -1,6 +1,7 @@
 import './App.css'
 import React, { useState } from 'react';
 
+
 const App: React.FC = () => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [message, setMessage] = useState<string | null>(null);
@@ -13,7 +14,7 @@ const App: React.FC = () => {
   };
 
   const handleUpload = async () => {
-    console.log("handleUpload Called");
+    //console.log("handleUpload Called");
     if (selectedFiles.length > 0) {
       try {
         for (const file of selectedFiles) {
@@ -26,6 +27,8 @@ const App: React.FC = () => {
           });
   
           if (response.ok) {
+            const data = await response.json();
+            console.log(data);
             setMessage(`File ${file.name} uploaded successfully`);
           } else {
             setMessage(`File ${file.name} upload failed`);
