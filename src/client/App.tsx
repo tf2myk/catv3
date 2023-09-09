@@ -1,5 +1,7 @@
-import './App.css'
-import React, { useState } from 'react';
+//import './App.css'
+import './style.css'
+import Gallery from './Gallery';
+import React, { useState, useEffect } from 'react';
 
 
 const App: React.FC = () => {
@@ -43,14 +45,25 @@ const App: React.FC = () => {
     }
   };
 
+  useEffect(() => {
+    if (selectedFiles.length > 0) {
+      handleUpload();
+    }
+  }, [selectedFiles]); // Trigger the effect when selectedFiles changes
+
+  
   return (
-    <div>
-      <h2>Google Cloud Storage Uploader</h2>
+    <div className='container'>
+      <h1 className='heading'>Google Cloud Storage Uploader</h1>
       <input type="file" name="image" accept="image/*" onChange={handleFileChange} multiple />
-      <button onClick={handleUpload}>Upload File</button>
       {message && <p>{message}</p>}
+      <br/><br/><br/><br/><br/>
+      <Gallery/>
     </div>
   );
+  
+
+
 };
 
 export default App;

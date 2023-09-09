@@ -51,6 +51,20 @@ app.get("/PagePost", (_, res) => {
   res.send("Hello Vite + React + TypeScript!");
 });
 
+app.get('/api/fetchData', async (req, res) => {
+  try {
+    const { data, error } = await supabase.from('catatable').select('*'); // Replace with your table name and desired columns
+    
+    if (error) {
+      return res.status(500).json({ error: 'Error fetching data' });
+    }
+
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500).json({ error: 'An error occurred' });
+  }
+});
+
 
 
 app.post('/Upload', upload.array('image'), (req, res) => {
