@@ -21,6 +21,22 @@ const bucketName = 'cata_test_1';
 
 const app = express();
 
+async function insertImageUrl(imageUrl:string, thename:string) {
+  try {
+    const { data, error } = await supabase.from('catatable').insert([
+      { URL: imageUrl, Label: thename},
+    ]);
+
+    if (error) {
+      console.error('Error inserting data:', error.message);
+    } else {
+      console.log('URL inserted successfully:', data);
+    }
+  } catch (e) {
+    console.error('An error occurred:', e);
+  }
+}
+
 
 //const key = import.meta.env.SUPAURL
 
@@ -65,6 +81,7 @@ app.post('/Upload', upload.array('image'), (req, res) => {
           const imageUrl = `https://storage.googleapis.com/${bucketName}/${file.originalname}`;
           let encodedObjectName = imageUrl.replace(/ /g, '%20');
           console.log('File uploaded:', encodedObjectName);
+          insertImageUrl(imageUrl, file.originalname.toString())
           resolve(imageUrl);
         });
 
