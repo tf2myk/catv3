@@ -1,5 +1,6 @@
 const config = require('./config.js');  
-import { createClient } from '@supabase/supabase-js'
+import { createClient} from '@supabase/supabase-js'
+
 
 
 const supabase = createClient(config.DATABASE_URL, config.API_KEY)
@@ -17,9 +18,15 @@ const storageClient = new Storage({
   keyFilename: 'src/server/asdadsa.json', // Replace with your key file path
 });
 
+
+
+
 const bucketName = 'cata_test_1';
 
 const app = express();
+
+
+
 
 async function insertImageUrl(imageUrl:string, thename:string) {
   try {
@@ -38,7 +45,6 @@ async function insertImageUrl(imageUrl:string, thename:string) {
 }
 
 
-//const key = import.meta.env.SUPAURL
 
 app.get("/apitest", (_, res) => {
 

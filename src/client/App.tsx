@@ -54,7 +54,7 @@ const App: React.FC = () => {
   
   return (
     <div className='container'>
-      <h1 className='heading'>Google Cloud Storage Uploader</h1>
+      <h1 className='heading'>Inventory Management</h1>
       <input type="file" name="image" accept="image/*" onChange={handleFileChange} multiple />
       {message && <p>{message}</p>}
       <br/><br/><br/><br/><br/>

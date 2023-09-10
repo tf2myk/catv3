@@ -1,5 +1,18 @@
 import React, { useEffect, useState } from 'react';
 
+
+import { createClient} from '@supabase/supabase-js'
+
+
+// @ts-ignore
+import config2 from './config2.js'; // Use a relative path
+// const databaseUrl: string = config2.DATABASE_URL;
+// const apiKey: string = config2.API_KEY;
+
+const supabase = createClient(config2.DATABASE_URL, config2.API_KEY)
+
+
+
 // Define an interface to match the API data structure
 interface ApiData {
   URL: string;
@@ -25,6 +38,24 @@ function Gallery() {
         console.error('Error fetching data:', error);
       }
     }
+
+    const channelA = supabase
+      .channel('schema-db-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'catatable'
+        },
+        (payload) => 
+        {
+          console.log("the payload was")
+          console.log(payload)
+          fetchData()
+        }
+      )
+      .subscribe()
 
     fetchData();
   }, []);
