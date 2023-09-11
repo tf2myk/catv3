@@ -28,16 +28,16 @@ const app = express();
 
 
 
-async function insertImageUrl(imageUrl:string, thename:string) {
+async function insertImageUrl(thename:string, URL:string) {
   try {
     const { data, error } = await supabase.from('catatable').insert([
-      { URL: imageUrl, Label: thename},
+      { Label: thename, URL: URL},
     ]);
 
     if (error) {
       console.error('Error inserting data:', error.message);
     } else {
-      console.log('URL inserted successfully:', data);
+      console.log('Insert Success:', data);
     }
   } catch (e) {
     console.error('An error occurred:', e);
@@ -89,8 +89,9 @@ app.post('/Upload', upload.array('image'), (req, res) => {
     const filesArray = Array.isArray(req.files) ? req.files : [req.files]; // Convert to an array if not already
 
     const uploadPromises = filesArray.map((file) => {
+      let r = (Math.random() + 1).toString(36).substring(7);
       return new Promise((resolve, reject) => {
-        const blob = storageClient.bucket(bucketName).file(file.originalname);
+        const blob = storageClient.bucket(bucketName).file(r);
         const blobStream = blob.createWriteStream();
 
         blobStream.on('error', (err:Error) => {
@@ -98,11 +99,11 @@ app.post('/Upload', upload.array('image'), (req, res) => {
         });
 
         blobStream.on('finish', () => {
-          const imageUrl = `https://storage.googleapis.com/${bucketName}/${file.originalname}`;
+          const imageUrl = `https://storage.googleapis.com/${bucketName}/${r}`;
           let encodedObjectName = imageUrl.replace(/ /g, '%20');
-          console.log('File uploaded:', encodedObjectName);
-          insertImageUrl(imageUrl, file.originalname.toString())
-          resolve(imageUrl);
+          //console.log('File uploaded:', encodedObjectName);
+          insertImageUrl(r, encodedObjectName)
+          resolve(encodedObjectName);
         });
 
         blobStream.end(file.buffer);
