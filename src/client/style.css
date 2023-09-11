@@ -23,7 +23,7 @@ Flexbox is used as a fallback so that browsers which don't support grid will sti
 
 body {
 	min-height: 100vh;
-	background-color: #1a1a1a87;
+	background-color: #29252417;
 }
 
 .container {
@@ -34,13 +34,12 @@ body {
 
 .heading {
 	font-family: "Montserrat", Arial, sans-serif;
-	font-size: 4rem;
+	font-size: 8rem; /* Adjust the font size as needed */
 	font-weight: 500;
-	line-height: 1.5;
 	text-align: center;
-	padding: 3.5rem 0;
-	color: #1a1a1a;
-}
+	padding: 1rem 0; /* Adjust the padding as needed */
+	color: #333; /* Dark gray text color */
+  }
 
 .heading span {
 	display: block;
@@ -94,3 +93,55 @@ Remove or comment-out the code block below to see how the browser will fall-back
 		margin: 0;
 	}
 }
+
+
+.button {
+	display: inline-block;
+	padding: 10px 20px;
+	background-color: #010202c9; /* Blue background color */
+	color: #fff; /* White text color */
+	border: none;
+	border-radius: 5px;
+	font-size: 16px;
+	cursor: pointer;
+	transition: background-color 0.3s ease, color 0.3s ease;
+	vertical-align: top;
+	margin-left: 30px;
+  }
+  
+  /* Hover effect for the button */
+  .button:hover {
+	background-color: #000000; /* Darker blue background color on hover */
+  }
+
+
+
+  /* Style for the custom file input container */
+.custom-file-input {
+	display: inline-block;
+	position: relative;
+	overflow: hidden;
+  }
+  
+  /* Hide the original file input */
+  .input-hidden {
+	display: none;
+  }
+  
+  /* Style for the custom file input label */
+  .file-label {
+	display: inline-block;
+	padding: 10px 20px;
+	background-color: #007bff; /* Button color */
+	color: #fff;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background-color 0.3s ease, color 0.3s ease;
+	font-size: 15px;
+	font-family: 'Montserrat';
+  }
+  
+  /* Hover effect for the label */
+  .file-label:hover {
+	background-color: #0056b3; /* Darker blue on hover */
+  }

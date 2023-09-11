@@ -1,16 +1,10 @@
 import React, { useEffect, useState } from 'react';
-
-
 import { createClient} from '@supabase/supabase-js'
 
-
 // @ts-ignore
-import config2 from './config2.js'; // Use a relative path
-// const databaseUrl: string = config2.DATABASE_URL;
-// const apiKey: string = config2.API_KEY;
+import config2 from './config2.js'; 
 
 const supabase = createClient(config2.DATABASE_URL, config2.API_KEY)
-
 
 
 // Define an interface to match the API data structure
@@ -50,7 +44,7 @@ function Gallery() {
         },
         (payload) => 
         {
-          console.log("the payload was")
+          //console.log("the payload was")
           console.log(payload)
           fetchData()
         }
@@ -59,6 +53,31 @@ function Gallery() {
 
     fetchData();
   }, []);
+
+
+
+
+  function handleImageClick(item:ApiData) {
+    const filenameToDelete = item.Label; // Replace with the filename you want to delete
+    const apiUrl = `/api/deletefile/${filenameToDelete}`;
+    fetch(apiUrl, {method: 'DELETE'})
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        // If the response status is 204 (No Content), it indicates successful deletion.
+        if (response.status === 204) {
+          console.log(`File "${filenameToDelete}" has been deleted successfully.`);
+        } else {
+          console.log(`Possible error reponsded with ${response}`);
+        }
+      })
+      .catch((error) => {
+        console.error('Fetch error:', error);
+      });
+
+
+  }
 
   return (
     <div className="gallery">
@@ -69,11 +88,13 @@ function Gallery() {
             id={item.Label}
             src={item.URL}
             alt={item.Label}
+            onClick={() => handleImageClick(item)}
           />
         </div>
       ))}
     </div>
   );
+  
 }
 
 export default Gallery;
