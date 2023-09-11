@@ -15,9 +15,9 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 const { Storage } = require('@google-cloud/storage');
 const storageClient = new Storage({
-  keyFilename: 'src/server/asdadsa.json', // Replace with your key file path
+  keyFilename: 'src/server/gcloudkey.json', // Path to your service account key JSON file
+  projectId: 'catfinder-395522', // Your Google Cloud Project ID
 });
-
 
 
 
@@ -43,6 +43,8 @@ async function insertImageUrl(thename:string, URL:string) {
     console.error('An error occurred:', e);
   }
 }
+
+
 
 
 
@@ -79,12 +81,9 @@ app.post('/Upload', upload.array('image'), (req, res) => {
       return res.status(400).send('No files were uploaded.');
     }
 
-    const storageClient = new Storage({
-      keyFilename: 'src/server/gcloudkey.json', // Path to your service account key JSON file
-      projectId: 'catfinder-395522', // Your Google Cloud Project ID
-    });
+    
 
-    const bucketName = 'cata_test_1'; // Your Google Cloud Storage bucket name
+    
 
     const filesArray = Array.isArray(req.files) ? req.files : [req.files]; // Convert to an array if not already
 
@@ -127,6 +126,37 @@ app.post('/Upload', upload.array('image'), (req, res) => {
     console.error('Error:', error);
     res.status(500).json({ error: 'An error occurred' });
   }
+});
+
+
+app.delete('/api/deletefile/:filename', async (req, res) => {
+  const { filename } = req.params;
+
+  try {
+    await storageClient.bucket(bucketName).file(filename).delete();
+    res.status(204).send(); // Respond with a 204 No Content status on success
+  } catch (error) {
+    console.error('Error deleting file:', error);
+    res.status(500).json({ error: 'Failed to delete file' });
+  }
+
+
+  const { data, error } = await supabase
+    .from('catatable')
+    .delete()
+    .eq('Label', filename); // Replace with your table name and primary key column name
+
+  if (error) {
+    console.error('Error deleting Supabase record:', error.message);
+  } else {
+    console.log('Deleted Supabase record:', data);
+  }
+
+
+
+
+
+
 });
 
 

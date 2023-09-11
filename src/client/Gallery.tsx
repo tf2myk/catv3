@@ -55,17 +55,28 @@ function Gallery() {
   }, []);
 
 
-  function handleButtonClick(item:any) {
-    // Access properties of the 'item' object to perform actions
-    const imageURL = item.URL;
-    const label = item.Label;
-  
-    // Example action: Display a message with the image URL and label
-    alert(`You clicked the button for the image with label "${label}" and URL "${imageURL}"`);
-  }
 
-  function handleImageClick(imageURL:string) {
-    console.log('Clicked image URL:', imageURL);
+
+  function handleImageClick(item:ApiData) {
+    const filenameToDelete = item.Label; // Replace with the filename you want to delete
+    const apiUrl = `/api/deletefile/${filenameToDelete}`;
+    fetch(apiUrl, {method: 'DELETE'})
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        // If the response status is 204 (No Content), it indicates successful deletion.
+        if (response.status === 204) {
+          console.log(`File "${filenameToDelete}" has been deleted successfully.`);
+        } else {
+          console.log(`Possible error reponsded with ${response}`);
+        }
+      })
+      .catch((error) => {
+        console.error('Fetch error:', error);
+      });
+
+
   }
 
   return (
@@ -77,9 +88,8 @@ function Gallery() {
             id={item.Label}
             src={item.URL}
             alt={item.Label}
-            onClick={() => handleImageClick(item.URL)}
+            onClick={() => handleImageClick(item)}
           />
-          <button onClick={() => handleButtonClick(item)}>Click me</button>
         </div>
       ))}
     </div>
