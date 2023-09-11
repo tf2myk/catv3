@@ -44,7 +44,7 @@ function Gallery() {
         },
         (payload) => 
         {
-          console.log("the payload was")
+          //console.log("the payload was")
           console.log(payload)
           fetchData()
         }

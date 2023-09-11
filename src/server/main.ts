@@ -132,25 +132,42 @@ app.post('/Upload', upload.array('image'), (req, res) => {
 app.delete('/api/deletefile/:filename', async (req, res) => {
   const { filename } = req.params;
 
+  // try {
+  //   await storageClient.bucket(bucketName).file(filename).delete();
+  //   res.status(204).send(); // Respond with a 204 No Content status on success
+  // } catch (error) {
+  //   console.error('Error deleting file:', error);
+  //   res.status(500).json({ error: 'Failed to delete file' });
+  // }
+
+
+  // const { data, error } = await supabase
+  //   .from('catatable')
+  //   .delete()
+  //   .eq('Label', filename); // Replace with your table name and primary key column name
+
+  // if (error) {
+  //   console.error('Error deleting Supabase record:', error.message);
+  // } else {
+  //   console.log('Deleted Supabase record:', data);
+  // }
+
   try {
-    await storageClient.bucket(bucketName).file(filename).delete();
+    // Use Promise.all to run both delete operations concurrently
+    await Promise.all([
+      storageClient.bucket(bucketName).file(filename).delete(),
+      supabase.from('catatable').delete().eq('Label', filename),
+    ]);
+  
+    // Both delete operations were successful
     res.status(204).send(); // Respond with a 204 No Content status on success
   } catch (error) {
-    console.error('Error deleting file:', error);
-    res.status(500).json({ error: 'Failed to delete file' });
+    console.error('Error deleting:', error);
+  
+    // Handle errors as needed
+    res.status(500).json({ error: 'Failed to delete' });
   }
-
-
-  const { data, error } = await supabase
-    .from('catatable')
-    .delete()
-    .eq('Label', filename); // Replace with your table name and primary key column name
-
-  if (error) {
-    console.error('Error deleting Supabase record:', error.message);
-  } else {
-    console.log('Deleted Supabase record:', data);
-  }
+  
 
 
 

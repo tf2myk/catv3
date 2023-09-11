@@ -34,10 +34,11 @@ const FileUpload: React.FC = () => {
     }
   };
 
+  //<p>Selected File: {selectedFile ? selectedFile.name : 'None'}</p>
+
   return (
     <div>
       <h2>Google Cloud Storage Uploader</h2>
-      <p>Selected File: {selectedFile ? selectedFile.name : 'None'}</p>
       <input type="file" onChange={handleFileChange} />
       <button onClick={handleUpload}>Upload File</button>
       {message && <p>{message}</p>}
