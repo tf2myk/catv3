@@ -1,7 +1,7 @@
 const config = require('./config.js');  
 import { createClient} from '@supabase/supabase-js'
 
-
+const path = require('path');
 
 const supabase = createClient(config.DATABASE_URL, config.API_KEY)
 
@@ -89,9 +89,12 @@ app.post('/Upload', upload.array('image'), (req, res) => {
     const filesArray = Array.isArray(req.files) ? req.files : [req.files]; // Convert to an array if not already
 
     const uploadPromises = filesArray.map((file) => {
+      
       let r = (Math.random() + 1).toString(36).substring(7);
+      const fileExtension = path.extname(file.originalname);
+      const newFileName = `${r}${fileExtension}`;
       return new Promise((resolve, reject) => {
-        const blob = storageClient.bucket(bucketName).file(r);
+        const blob = storageClient.bucket(bucketName).file(newFileName);
         const blobStream = blob.createWriteStream();
 
         blobStream.on('error', (err:Error) => {
@@ -99,10 +102,12 @@ app.post('/Upload', upload.array('image'), (req, res) => {
         });
 
         blobStream.on('finish', () => {
-          const imageUrl = `https://storage.googleapis.com/${bucketName}/${r}`;
+          const imageUrl = `https://storage.googleapis.com/${bucketName}/${newFileName}`;
           let encodedObjectName = imageUrl.replace(/ /g, '%20');
           //console.log('File uploaded:', encodedObjectName);
-          insertImageUrl(r, encodedObjectName)
+          
+
+          insertImageUrl(newFileName, encodedObjectName)
           resolve(encodedObjectName);
         });
 
