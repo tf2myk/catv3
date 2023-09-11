@@ -78,18 +78,38 @@ function Gallery() {
 
 
   }
+  
+  // return (
+  //   <div className="gallery">
+  //     {galleryData.map((item, index) => (
+        
+  //         <div key={index} className="gallery-item">
+  //           <img
+  //             className="gallery-image"
+  //             id={item.Label}
+  //             src={item.URL}
+  //             alt={item.Label}
+  //             onClick={() => handleImageClick(item)}
+  //           />
+  //         </div>
+  //     ))}
+  //   </div>
+  // );
 
   return (
     <div className="gallery">
       {galleryData.map((item, index) => (
         <div key={index} className="gallery-item">
-          <img
-            className="gallery-image"
-            id={item.Label}
-            src={item.URL}
-            alt={item.Label}
-            onClick={() => handleImageClick(item)}
-          />
+          <div className="image-container">
+            <img
+              className="gallery-image"
+              id={item.Label}
+              src={item.URL}
+              alt={item.Label}
+              onClick={() => handleImageClick(item)}
+            />
+            <div className="image-caption">Hover over me</div>
+          </div>
         </div>
       ))}
     </div>
