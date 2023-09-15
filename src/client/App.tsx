@@ -77,7 +77,7 @@ const App: React.FC = () => {
   
   return (
     <div className='container'>
-      <h1 className='heading'>Inventory Management</h1>
+      <h1 className='heading'>(wip)</h1>
       <div className="custom-file-input">
         <input type="file" accept="image/*" id="fileInput" onChange={handleFileChange} className="input-hidden" multiple />
         <label htmlFor="fileInput" className="file-label">
