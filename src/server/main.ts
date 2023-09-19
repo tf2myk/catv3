@@ -31,7 +31,7 @@ const app = express();
 async function insertImageUrl(thename:string, URL:string) {
   try {
     const { data, error } = await supabase.from('catatable').insert([
-      { Label: thename, URL: URL},
+      { Label: thename, URL: URL, vanity: "DEFAULT"},
     ]);
 
     if (error) {
@@ -47,22 +47,13 @@ async function insertImageUrl(thename:string, URL:string) {
 
 
 
-
-app.get("/apitest", (_, res) => {
-
-  res.send(
-    config.API_KEY
-  );
-});
-
-app.get("/PagePost", (_, res) => {
-  res.send("Hello Vite + React + TypeScript!");
-});
-
 app.get('/api/fetchData', async (req, res) => {
   try {
-    const { data, error } = await supabase.from('catatable').select('*'); // Replace with your table name and desired columns
-    
+    const { data, error } = await supabase
+    .from('catatable')
+    .select('*') // Replace with your desired columns
+    .order('created_at'); // Order by the 'created_at' field in ascending order
+        
     if (error) {
       return res.status(500).json({ error: 'Error fetching data' });
     }

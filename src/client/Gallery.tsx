@@ -12,6 +12,7 @@ interface ApiData {
   URL: string;
   Label: string;
   created_at: string;
+  vanity: string;
 }
 
 function Gallery() {
@@ -57,7 +58,7 @@ function Gallery() {
 
 
 
-  function handleImageClick(item:ApiData) {
+  function DeleteItem(item:ApiData) {
     const filenameToDelete = item.Label; // Replace with the filename you want to delete
     const apiUrl = `/api/deletefile/${filenameToDelete}`;
     fetch(apiUrl, {method: 'DELETE'})
@@ -79,11 +80,13 @@ function Gallery() {
 
   }
   
+
+
   // return (
   //   <div className="gallery">
   //     {galleryData.map((item, index) => (
-        
-  //         <div key={index} className="gallery-item">
+  //       <div key={index} className="gallery-item">
+  //         <div className="image-container">
   //           <img
   //             className="gallery-image"
   //             id={item.Label}
@@ -91,10 +94,51 @@ function Gallery() {
   //             alt={item.Label}
   //             onClick={() => handleImageClick(item)}
   //           />
+  //           <div className="image-caption">{item.vanity}</div>
   //         </div>
+  //       </div>
   //     ))}
   //   </div>
   // );
+
+  async function RenameItem (item:ApiData)
+  {
+    const { data, error } = await supabase
+    .from('catatable')
+    .select('*')
+    .eq('Label', item.Label); // Replace 'id' with your primary key field name
+
+    if (data && data.length > 0) {
+      const updatedEntry = {
+        vanity: 'new_value', // Set the new value
+      };
+    
+      const { data: updatedData, error: updateError } = await supabase
+        .from('catatable')
+        .update(updatedEntry)
+        .eq('Label', item.Label);
+    
+      if (updateError) {
+        // Handle the update error
+      } else {
+        // Entry has been updated successfully
+      }
+    }
+
+
+    
+  }
+
+  function handleButton2Click (item:ApiData)
+  {
+    console.log(item.vanity)
+  }
+
+  function handleButton3Click (item:ApiData)
+  {
+    console.log(item.vanity)
+  }
+
 
   return (
     <div className="gallery">
@@ -106,9 +150,13 @@ function Gallery() {
               id={item.Label}
               src={item.URL}
               alt={item.Label}
-              onClick={() => handleImageClick(item)}
+              //onClick={() => DeleteItem(item)}
             />
-            <div className="image-caption">Hover over me</div>
+            <div className="image-caption">{item.vanity}</div>
+            <div className="image-buttons">
+              <button onClick={() => DeleteItem(item)}>Delete</button>
+              <button onClick={() => RenameItem(item)}>RenameItem</button>
+            </div>
           </div>
         </div>
       ))}
