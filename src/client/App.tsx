@@ -12,6 +12,7 @@ const App: React.FC = () => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [message, setMessage] = useState<string | null>(null);
   const [uploadedFileCount, setUploadedFileCount] = useState<number>(0); // Initialize the counter
+  const [isUploading, setIsUploading] = useState(false);
 
   
 
@@ -30,6 +31,7 @@ const App: React.FC = () => {
 
   const handleUpload = async () => {
     if (selectedFiles.length > 0) {
+      setIsUploading(true); // Set to true when uploading starts
       try {
         const uploadPromises = selectedFiles.map(async (file) => {
           const formData = new FormData();
@@ -54,6 +56,7 @@ const App: React.FC = () => {
 
         // Wait for all upload promises to complete before resetting selectedFiles
         await Promise.all(uploadPromises);
+        setIsUploading(false); // Set back to false on error
 
         // Reset selectedFiles after all files have been uploaded
         resetSelectedFiles();
@@ -83,7 +86,7 @@ const App: React.FC = () => {
   
   return (
     <div className='container'>
-      <h1 className='heading'>(wip)</h1>
+      <h1 className='heading'>(Cats)</h1>
       <div className="custom-file-input">
         <input type="file" accept="image/*" id="fileInput" onChange={handleFileChange} className="input-hidden" multiple />
         <label htmlFor="fileInput" className="file-label">
@@ -92,6 +95,8 @@ const App: React.FC = () => {
       </div>
       <button className='button' onClick={handleUpload}> Upload </button>
       {message && <p>{message}</p>}
+      <br/><br/><br/><br/><br/>
+      {isUploading && <img src="src/client/loading.gif" alt="Uploading..." />}
       <br/><br/><br/><br/><br/>
       <Gallery/>
     </div>
