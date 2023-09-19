@@ -1,10 +1,15 @@
 const config = require('./config.js');  
 import { createClient} from '@supabase/supabase-js'
 
+import { Request, Response } from 'express';
+
 const path = require('path');
 
 const supabase = createClient(config.DATABASE_URL, config.API_KEY)
 
+const serpaAPIkeys = config.SERP_KEY;
+const SerpApi = require('google-search-results-nodejs');
+const search = new SerpApi.GoogleSearch(serpaAPIkeys);
 
 
 import express from "express";
@@ -25,6 +30,12 @@ const bucketName = 'cata_test_1';
 
 const app = express();
 
+app.use(express.static('server'));
+app.use(express.json());
+
+
+
+// Serve static files from the "src/client" directory
 
 
 
@@ -47,6 +58,54 @@ async function insertImageUrl(thename:string, URL:string) {
 
 
 
+
+app.get('/results.html', (req, res) => {
+  // Construct the absolute path to the results.html file
+  const filePath = path.join(__dirname, './results.html');
+
+  // Send the file as a response
+  res.sendFile(filePath);
+  console.log("results");
+});
+
+
+
+// Your existing searchcats function
+// Your existing searchcats function
+const searchcats = async (url: string) => {
+  return new Promise((resolve, reject) => {
+    const params = {
+      engine: "google_lens",
+      url: url,
+    };
+
+    const callback = function (data: any) {
+      resolve(data);
+    };
+
+    // Assuming 'search' is your external search library
+    search.json(params, callback);
+    console.log("searchcats ran");
+  });
+};
+
+app.post('/api/searchcats', async (req, res) => {
+  try {
+    console.log('Request Body:', req.body); // Log the request body
+    const url = req.body.url; // Assuming 'url' is the key in your JSON payload
+    const data = await searchcats(url);
+    res.json(data);
+  } catch (error) {
+    console.error("Error in searchcats:", error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
+
+
+
+
 app.get('/api/fetchData', async (req, res) => {
   try {
     const { data, error } = await supabase
@@ -63,6 +122,9 @@ app.get('/api/fetchData', async (req, res) => {
     res.status(500).json({ error: 'An error occurred' });
   }
 });
+
+
+
 
 
 

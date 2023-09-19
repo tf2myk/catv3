@@ -32,6 +32,15 @@ function Gallery() {
     setIsPopupOpen(false);
   };
 
+
+  const openNewTab = (parameter:string) => {
+    
+    var encodedObjectName = parameter.replace(/ /g, '%20');
+    const url = `/results.html?parameter=${encodeURIComponent(encodedObjectName)}`;
+    
+    window.open(url, '_blank');
+  };
+ 
   const handlePopupSubmit = (inputValue: string, item:ApiData) => {
     OpenPopup(item, inputValue)
     console.log('Submitted Value:', inputValue);
@@ -163,6 +172,7 @@ function Gallery() {
                 onSubmit={(inputValue) => handlePopupSubmit(inputValue, item)}
               />
               <button onClick={() => DeleteItem(item)}>Delete</button>
+              <button onClick={() => openNewTab(item.URL)}>Search</button>
             </div>
           </div>
         </div>
