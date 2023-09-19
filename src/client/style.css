@@ -156,3 +156,17 @@ body {
   .image-container:hover .image-caption {
 	opacity: 1;
   }
+
+
+  .popup-input {
+	width: 10%; /* Adjust the width as needed */
+	padding: 0px; /* Adjust the padding as needed */
+	font-size: 14px; /* Adjust the font size as needed */
+	border: 0px solid #ccc; /* Add a border if desired */
+	/* Add any other styling you want */
+  }
+
+  .button-container {
+	vertical-align: top; /* Align children to the top */
+	text-align: left;
+  }

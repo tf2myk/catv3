@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { createClient} from '@supabase/supabase-js'
 
+
+import StringInputPopup from './StringInputPopup';
+
+
 // @ts-ignore
 import config2 from './config2.js'; 
 
@@ -17,6 +21,21 @@ interface ApiData {
 
 function Gallery() {
   const [galleryData, setGalleryData] = useState<ApiData[]>([]);
+
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  const openPopup = () => {
+    setIsPopupOpen(true);
+  };
+
+  const closePopup = () => {
+    setIsPopupOpen(false);
+  };
+
+  const handlePopupSubmit = (inputValue: string, item:ApiData) => {
+    OpenPopup(item, inputValue)
+    console.log('Submitted Value:', inputValue);
+  };
 
   useEffect(() => {
     async function fetchData() {
@@ -82,26 +101,9 @@ function Gallery() {
   
 
 
-  // return (
-  //   <div className="gallery">
-  //     {galleryData.map((item, index) => (
-  //       <div key={index} className="gallery-item">
-  //         <div className="image-container">
-  //           <img
-  //             className="gallery-image"
-  //             id={item.Label}
-  //             src={item.URL}
-  //             alt={item.Label}
-  //             onClick={() => handleImageClick(item)}
-  //           />
-  //           <div className="image-caption">{item.vanity}</div>
-  //         </div>
-  //       </div>
-  //     ))}
-  //   </div>
-  // );
 
-  async function RenameItem (item:ApiData)
+
+  async function OpenPopup(item:ApiData, input:string)
   {
     const { data, error } = await supabase
     .from('catatable')
@@ -110,7 +112,7 @@ function Gallery() {
 
     if (data && data.length > 0) {
       const updatedEntry = {
-        vanity: 'new_value', // Set the new value
+        vanity: input, // Set the new value
       };
     
       const { data: updatedData, error: updateError } = await supabase
@@ -153,9 +155,14 @@ function Gallery() {
               //onClick={() => DeleteItem(item)}
             />
             <div className="image-caption">{item.vanity}</div>
-            <div className="image-buttons">
+            <div className="button-container">
+              
+              <StringInputPopup
+                isOpen={isPopupOpen}
+                onClose={closePopup}
+                onSubmit={(inputValue) => handlePopupSubmit(inputValue, item)}
+              />
               <button onClick={() => DeleteItem(item)}>Delete</button>
-              <button onClick={() => RenameItem(item)}>RenameItem</button>
             </div>
           </div>
         </div>

@@ -4,10 +4,16 @@ import Gallery from './Gallery';
 import React, { useState, useEffect } from 'react';
 
 
+
+
+
+
 const App: React.FC = () => {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [message, setMessage] = useState<string | null>(null);
   const [uploadedFileCount, setUploadedFileCount] = useState<number>(0); // Initialize the counter
+
+  
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
